@@ -19,3 +19,49 @@ import "deps/phoenix_html/web/static/js/phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+
+import {Socket} from "deps/phoenix/web/static/js/phoenix"
+
+class App {
+  static init() {
+    console.log("Initialized")
+    var username = $("#username")
+    var msgBody  = $("#message")
+
+    let socket = new Socket("/socket")
+    socket.connect()
+    socket.onClose( e => console.log("Closed connection") )
+
+    var channel = socket.channel("rooms:lobby", {})
+    channel.join()
+      .receive( "error", () => console.log("Connection error") )
+      .receive( "ok",    () => console.log("Connected") )
+
+    msgBody.off("keypress")
+      .on("keypress", e => {
+        if (e.keyCode == 13) {
+          console.log(`[${username.val()}] ${msgBody.val()}`)
+          channel.push("new:message", {
+            user: username.val(),
+            body: msgBody.val()
+          })
+          msgBody.val("")
+        }
+      })
+    channel.on( "new:message", message => this.renderMessage(message) )
+  }
+
+  static renderMessage(message) {
+    var messages = $("#messages")
+    var user = this.sanitize(message.user || "New User")
+    var body = this.sanitize(message.body)
+
+    messages.append(`<p><b>[${user}]</b>: ${body}</p>`)
+  }
+
+  static sanitize(str) { return $("<div/>").text(str).html() }
+}
+
+$( () => App.init() )
+
+export default App
