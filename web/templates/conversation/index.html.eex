@@ -1,0 +1,30 @@
+<h2>Listing conversations</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Message</th>
+      <th>User</th>
+      <th>Parent</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for conversation <- @conversations do %>
+    <tr>
+      <td><%= conversation.message %></td>
+      <td><%= conversation.user_id %></td>
+      <td><%= conversation.parent_id %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: conversation_path(@conn, :show, conversation), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: conversation_path(@conn, :edit, conversation), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: conversation_path(@conn, :delete, conversation), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New conversation", to: conversation_path(@conn, :new) %>

@@ -1,0 +1,23 @@
+<h2>Show conversation</h2>
+
+<ul>
+
+  <li>
+    <strong>Message:</strong>
+    <%= @conversation.message %>
+  </li>
+
+  <li>
+    <strong>User:</strong>
+    <%= @conversation.user_id %>
+  </li>
+
+  <li>
+    <strong>Parent:</strong>
+    <%= @conversation.parent_id %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: conversation_path(@conn, :edit, @conversation) %>
+<%= link "Back", to: conversation_path(@conn, :index) %>

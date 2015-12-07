@@ -18,6 +18,7 @@ defmodule ChatDemo.Router do
 
     get "/", PageController, :index
     resources "/registrations", RegistrationController, only: [:new, :create]
+    resources "/conversations", ConversationController
     get    "/login",  SessionController, :new
     post   "/login",  SessionController, :create
     delete "/logout", SessionController, :delete
