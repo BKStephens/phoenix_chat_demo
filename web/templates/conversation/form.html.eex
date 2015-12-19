@@ -10,19 +10,12 @@
     </div>
   <% end %>
 
+  <%= label f, :conversation_participants, "Recipients", class: "control-label" %>
+  <%= multiple_select(f, :conversation_participants,name_id_map(@users)) %>
+
   <div class="form-group">
     <%= label f, :message, "Message", class: "control-label" %>
     <%= text_input f, :message, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :user_id, "User", class: "control-label" %>
-    <%= number_input f, :user_id, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :parent_id, "Parent", class: "control-label" %>
-    <%= number_input f, :parent_id, class: "form-control" %>
   </div>
 
   <div class="form-group">

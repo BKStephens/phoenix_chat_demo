@@ -2,7 +2,8 @@ defmodule ChatDemo.ConversationControllerTest do
   use ChatDemo.ConnCase
 
   alias ChatDemo.Conversation
-  @valid_attrs %{message: "some content", parent_id: 42, user_id: 42}
+
+  @valid_attrs %{message: "some content", user_id: 42}
   @invalid_attrs %{}
 
   setup do
@@ -20,10 +21,14 @@ defmodule ChatDemo.ConversationControllerTest do
     assert html_response(conn, 200) =~ "New conversation"
   end
 
-  test "creates resource and redirects when data is valid", %{conn: conn} do
-    conn = post conn, conversation_path(conn, :create), conversation: @valid_attrs
+  test "creates conversation with participants", %{conn: conn} do
+    conversation_params = Map.merge @valid_attrs, %{ conversation_participants: ["1"] }
+    conn = post conn, conversation_path(conn, :create), conversation: conversation_params 
     assert redirected_to(conn) == conversation_path(conn, :index)
-    assert Repo.get_by(Conversation, @valid_attrs)
+    conversation = Repo.get_by(Conversation, @valid_attrs)
+    assert conversation
+    conversation_participants = Repo.all assoc(conversation, :conversation_participants)
+    assert conversation_participants |> Enum.count > 0
   end
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do

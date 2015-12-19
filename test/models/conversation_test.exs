@@ -1,5 +1,6 @@
 defmodule ChatDemo.ConversationTest do
   use ChatDemo.ModelCase
+  use ChatDemo.ConnCase
 
   alias ChatDemo.Conversation
 
