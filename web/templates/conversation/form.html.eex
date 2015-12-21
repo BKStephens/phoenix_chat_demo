@@ -11,7 +11,7 @@
   <% end %>
 
   <%= label f, :conversation_participants, "Recipients", class: "control-label" %>
-  <%= multiple_select(f, :conversation_participants,name_id_map(@users)) %>
+  <%= multiple_select(f, :conversation_participants, name_id_map(@users)) %>
 
   <div class="form-group">
     <%= label f, :message, "Message", class: "control-label" %>

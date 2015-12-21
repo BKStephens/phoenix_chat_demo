@@ -14,7 +14,7 @@ defmodule ChatDemo.ConversationController do
 
   def new(conn, _params) do
     users = Repo.all(User)
-    changeset = Conversation.changeset(%Conversation{})
+    changeset = Conversation.changeset(%Conversation{} |> Repo.preload [:conversation_participants])
     render(conn, "new.html", users: users, changeset: changeset)
   end
 
@@ -34,7 +34,7 @@ defmodule ChatDemo.ConversationController do
         |> put_flash(:info, "Conversation created successfully.")
         |> redirect(to: conversation_path(conn, :index))
       {:error, changeset} ->
-        render(conn, "new.html", users: Repo.all(User), changeset: changeset)
+        redirect conn, to: "/conversations/new"
     end
   end
 

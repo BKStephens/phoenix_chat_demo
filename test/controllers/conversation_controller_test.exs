@@ -33,7 +33,7 @@ defmodule ChatDemo.ConversationControllerTest do
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do
     conn = post conn, conversation_path(conn, :create), conversation: @invalid_attrs
-    assert html_response(conn, 200) =~ "New conversation"
+    assert html_response(conn, 302)
   end
 
   test "shows chosen resource", %{conn: conn} do
