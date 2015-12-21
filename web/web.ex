@@ -18,8 +18,9 @@ defmodule ChatDemo.Web do
 
   def model do
     quote do
-      use Ecto.Model
+      use Ecto.Schema
 
+      import Ecto
       import Ecto.Changeset
       import Ecto.Query, only: [from: 1, from: 2]
     end
@@ -30,6 +31,7 @@ defmodule ChatDemo.Web do
       use Phoenix.Controller
 
       alias ChatDemo.Repo
+      import Ecto
       import Ecto.Model
       import Ecto.Query, only: [from: 1, from: 2]
 
@@ -63,6 +65,7 @@ defmodule ChatDemo.Web do
       use Phoenix.Channel
 
       alias ChatDemo.Repo
+      import Ecto
       import Ecto.Model
       import Ecto.Query, only: [from: 1, from: 2]
     end
