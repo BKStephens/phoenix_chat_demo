@@ -24,4 +24,9 @@ defmodule ChatDemo.User do
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 5)
   end
+
+  #TODO: figure out how to use session in tests
+  def all_other_users(repo, user_id) do
+    repo.all(from u in ChatDemo.User, where: u.id != ^user_id)
+  end
 end

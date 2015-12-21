@@ -13,23 +13,27 @@ defmodule ChatDemo.ConversationController do
   end
 
   def new(conn, _params) do
-    users = Repo.all(User)
+    #TODO: figure out how to use session data in tests
+    users = User.all_other_users(Repo, 
+                                 get_session(conn, :current_user) || 0)
     changeset = Conversation.changeset(%Conversation{} |> Repo.preload [:conversation_participants])
     render(conn, "new.html", users: users, changeset: changeset)
   end
 
   def create(conn, %{"conversation" => conversation_params}) do
     #TODO: figure out how to set session from tests and stop getting user_id from params
-    current_user = get_session(conn, :current_user)
+    current_user = conversation_params["user_id"] || get_session(conn, :current_user)
     conversation = %{message: conversation_params["message"],
-                     user_id: conversation_params["user_id"] || current_user}
+                     user_id: current_user}
     conversation_changeset = Conversation.changeset(%Conversation{},conversation)
 
     case Repo.insert(conversation_changeset) do
       {:ok, conversation} ->
         #TODO: figure out how to insert nested attributes in one go instead of doing it manually
-        #TODO: always make creator a conversation_participant and don't show in list of users
-        ConversationParticipant.create_from_params(conversation_params["conversation_participants"], conversation, Repo)
+        if conversation_params["conversation_participants"] do
+          participants = [Integer.to_string(current_user) | conversation_params["conversation_participants"]] 
+        end
+        ConversationParticipant.create_from_params(participants, conversation, Repo)
         conn
         |> put_flash(:info, "Conversation created successfully.")
         |> redirect(to: conversation_path(conn, :index))
@@ -45,7 +49,9 @@ defmodule ChatDemo.ConversationController do
 
   def edit(conn, %{"id" => id}) do
     conversation = Repo.get!(Conversation, id) |> Repo.preload [:conversation_participants]
-    users = Repo.all(User)
+    #TODO: figure out how to use session data in tests
+    users = User.all_other_users(Repo, 
+                                 get_session(conn, :current_user) || 0)
     changeset = Conversation.changeset(conversation)
     render(conn, "edit.html", conversation: conversation, users: users, changeset: changeset)
   end
@@ -60,7 +66,13 @@ defmodule ChatDemo.ConversationController do
         |> put_flash(:info, "Conversation updated successfully.")
         |> redirect(to: conversation_path(conn, :show, conversation))
       {:error, changeset} ->
-        render(conn, "edit.html", conversation: conversation, users: Repo.all(User), changeset: changeset)
+        render(conn, 
+              "edit.html", 
+              conversation: conversation, 
+              #TODO: figure out how to use session data in tests
+              users: User.all_other_users(Repo, 
+                                          get_session(conn, :current_user) || 0), 
+              changeset: changeset)
     end
   end
 
