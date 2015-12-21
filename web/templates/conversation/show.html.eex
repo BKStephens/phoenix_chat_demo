@@ -12,11 +12,12 @@
     <%= @conversation.user_id %>
   </li>
 
+  <strong>Recipients:</strong>
+  <%= for cp <- @conversation.conversation_participants do %>
   <li>
-    <strong>Parent:</strong>
-    <%= @conversation.parent_id %>
+    <%= cp.user.email  %>
   </li>
-
+  <%= end %>
 </ul>
 
 <%= link "Edit", to: conversation_path(@conn, :edit, @conversation) %>

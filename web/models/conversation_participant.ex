@@ -2,9 +2,9 @@ defmodule ChatDemo.ConversationParticipant do
   use ChatDemo.Web, :model
 
   schema "conversation_participants" do
-    field :user_id, :integer
     field :state, :string
     belongs_to :conversation, ChatDemo.Conversation
+    belongs_to :user, ChatDemo.User
 
     timestamps
   end

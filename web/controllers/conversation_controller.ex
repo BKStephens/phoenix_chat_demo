@@ -39,7 +39,7 @@ defmodule ChatDemo.ConversationController do
   end
 
   def show(conn, %{"id" => id}) do
-    conversation = Repo.get!(Conversation, id)
+    conversation = Repo.get!(Conversation, id) |> Repo.preload [conversation_participants: [:user]]
     render(conn, "show.html", conversation: conversation)
   end
 
