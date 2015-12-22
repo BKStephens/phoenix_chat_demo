@@ -26,7 +26,7 @@ class App {
   static init() {
     console.log("Initialized")
     var msgBody  = $("#message")
-    var conversationId = $("meta[name=conversation_id]").attr("content"))
+    var conversationId = $("meta[name=conversation_id]").attr("content")
 
     let socket = new Socket("/socket")
     socket.connect({user_token: $("meta[name=user_token]").attr("content")})

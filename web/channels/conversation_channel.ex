@@ -6,9 +6,13 @@ defmodule ChatDemo.ConversationChannel do
   end
 
   def handle_in("new:message", message, socket) do
-    IO.puts socket.assigns[:current_user]
-    current_user = ChatDemo.Repo.get_by(ChatDemo.User, %{id: socket.assigns[:current_user]})
+    user_id =  socket.assigns[:current_user]
+    "conversations:" <> conversation_id = socket.topic
+
+    current_user = ChatDemo.Repo.get_by(ChatDemo.User, %{id: user_id})
     broadcast! socket, "new:message", %{user: current_user.email, body: message["body"]}
+    ChatDemo.Conversation.reply(conversation_id, user_id, message["body"])
+
     {:noreply, socket}
   end
 end
