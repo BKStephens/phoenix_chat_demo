@@ -20,5 +20,4 @@
   <%= end %>
 </ul>
 
-<%= link "Edit", to: conversation_path(@conn, :edit, @conversation) %>
 <%= link "Back", to: conversation_path(@conn, :index) %>

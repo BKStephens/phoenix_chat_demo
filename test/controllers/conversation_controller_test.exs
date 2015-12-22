@@ -48,25 +48,6 @@ defmodule ChatDemo.ConversationControllerTest do
     end
   end
 
-  test "renders form for editing chosen resource", %{conn: conn} do
-    conversation = Repo.insert! %Conversation{}
-    conn = get conn, conversation_path(conn, :edit, conversation)
-    assert html_response(conn, 200) =~ "Edit conversation"
-  end
-
-  test "updates chosen resource and redirects when data is valid", %{conn: conn} do
-    conversation = Repo.insert! %Conversation{}
-    conn = put conn, conversation_path(conn, :update, conversation), conversation: @valid_attrs
-    assert redirected_to(conn) == conversation_path(conn, :show, conversation)
-    assert Repo.get_by(Conversation, @valid_attrs)
-  end
-
-  test "does not update chosen resource and renders errors when data is invalid", %{conn: conn} do
-    conversation = Repo.insert! %Conversation{}
-    conn = put conn, conversation_path(conn, :update, conversation), conversation: @invalid_attrs
-    assert html_response(conn, 200) =~ "Edit conversation"
-  end
-
   test "deletes chosen resource", %{conn: conn} do
     conversation = Repo.insert! %Conversation{}
     conn = delete conn, conversation_path(conn, :delete, conversation)

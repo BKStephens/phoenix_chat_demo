@@ -19,7 +19,6 @@
 
       <td class="text-right">
         <%= link "Show", to: conversation_path(@conn, :show, conversation), class: "btn btn-default btn-xs" %>
-        <%= link "Edit", to: conversation_path(@conn, :edit, conversation), class: "btn btn-default btn-xs" %>
         <%= link "Delete", to: conversation_path(@conn, :delete, conversation), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
       </td>
     </tr>
