@@ -25,14 +25,14 @@ import {Socket} from "deps/phoenix/web/static/js/phoenix"
 class App {
   static init() {
     console.log("Initialized")
-    var username = $("#username")
     var msgBody  = $("#message")
+    var conversationId = $("meta[name=conversation_id]").attr("content"))
 
     let socket = new Socket("/socket")
-    socket.connect()
+    socket.connect({user_token: $("meta[name=user_token]").attr("content")})
     socket.onClose( e => console.log("Closed connection") )
 
-    var channel = socket.channel("rooms:lobby", {})
+    var channel = socket.channel("conversations:"+conversationId, {})
     channel.join()
       .receive( "error", () => console.log("Connection error") )
       .receive( "ok",    () => console.log("Connected") )
@@ -40,9 +40,8 @@ class App {
     msgBody.off("keypress")
       .on("keypress", e => {
         if (e.keyCode == 13) {
-          console.log(`[${username.val()}] ${msgBody.val()}`)
+          console.log(`${msgBody.val()}`)
           channel.push("new:message", {
-            user: username.val(),
             body: msgBody.val()
           })
           msgBody.val("")

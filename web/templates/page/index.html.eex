@@ -3,15 +3,3 @@
 To get started, register a user and then login. When registering, the email
 address does not have to be real, but it can't have already been registered.
 </div>  
-<div id="messages"></div>
-<br/>
-
-<div class="col-md-2 form-group">
-  <label>Username</label>
-  <input id="username" type="text" class="form-control" />
-</div>
-
-<div class="col-md-6 form-group">
-  <label>Message</label>
-  <input id="message" type="text" class="form-control" />
-</div>
