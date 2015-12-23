@@ -7,9 +7,9 @@ defmodule ChatDemo.Conversation do
 
   schema "conversations" do
     field :message, :string
-    field :user_id, :integer
     field :parent_id, :integer
 
+    belongs_to :user, ChatDemo.User
     has_many :conversation_participants, ChatDemo.ConversationParticipant
     timestamps
   end

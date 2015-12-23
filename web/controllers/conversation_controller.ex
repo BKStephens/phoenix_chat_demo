@@ -44,7 +44,10 @@ defmodule ChatDemo.ConversationController do
 
   def show(conn, %{"id" => id}) do
     conversation = Repo.get!(Conversation, id) |> Repo.preload [conversation_participants: [:user]]
-    render(conn, "show.html", conversation: conversation)
+    messages = Repo.all(from c in Conversation,
+                       where: c.parent_id == ^id or c.id == ^id,
+                       select: c) |> Repo.preload [:user]
+    render(conn, "show.html", conversation: conversation, conversation_messages: messages)
   end
 
   def delete(conn, %{"id" => id}) do
