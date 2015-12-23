@@ -8,7 +8,12 @@ defmodule ChatDemo.ConversationController do
   plug :scrub_params, "conversation" when action in [:create, :update]
 
   def index(conn, _params) do
-    conversations = Repo.all(Conversation)
+    user_id = get_session(conn, :current_user) || 0
+    conversations = Repo.all(from c in Conversation,
+                             join: cp in ConversationParticipant, 
+                             on: c.id == cp.conversation_id,
+                             where: is_nil(c.parent_id)
+                                    and cp.user_id == ^user_id)
     render(conn, "index.html", conversations: conversations)
   end
 
