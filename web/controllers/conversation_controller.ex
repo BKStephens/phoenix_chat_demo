@@ -18,19 +18,16 @@ defmodule ChatDemo.ConversationController do
   end
 
   def new(conn, _params) do
-    #TODO: figure out how to use session data in tests
-    users = User.all_other_users(Repo, 
-                                 get_session(conn, :current_user) || 0)
+    users = User.all_other_users(Repo, get_session(conn, :current_user))
     changeset = Conversation.changeset(%Conversation{} |> Repo.preload [:conversation_participants])
     render(conn, "new.html", users: users, changeset: changeset)
   end
 
   def create(conn, %{"conversation" => conversation_params}) do
-    #TODO: figure out how to set session from tests and stop getting user_id from params
-    current_user = conversation_params["user_id"] || get_session(conn, :current_user)
+    current_user = get_session(conn, :current_user)
     conversation = %{message: conversation_params["message"],
                      user_id: current_user}
-    conversation_changeset = Conversation.changeset(%Conversation{},conversation)
+    conversation_changeset = Conversation.changeset(%Conversation{}, conversation)
 
     case Repo.insert(conversation_changeset) do
       {:ok, conversation} ->
@@ -42,7 +39,7 @@ defmodule ChatDemo.ConversationController do
         conn
         |> put_flash(:info, "Conversation created successfully.")
         |> redirect(to: conversation_path(conn, :index))
-      {:error, changeset} ->
+      {:error, _changeset} ->
         redirect conn, to: "/conversations/new"
     end
   end

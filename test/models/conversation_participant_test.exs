@@ -10,8 +10,9 @@ defmodule ChatDemo.ConversationParticipantTest do
 
   setup_all do
     conn = conn()
+    |> post session_path(conn, :create, %{"session": %{"email": "testuser1@gmail.com", "password": "foobar"}})
     #TODO: refactor to use https://github.com/sinetris/factory_girl_elixir
-    conversation_params = %{message: "some content", user_id: 42}
+    conversation_params = %{message: "a message for test/models/conversation_participant"}
     post conn, conversation_path(conn, :create), conversation: conversation_params 
     conversation = Repo.get_by(Conversation, conversation_params)
     {:ok, conn: conn, conversation: conversation}
@@ -28,7 +29,8 @@ defmodule ChatDemo.ConversationParticipantTest do
   end
 
   test "create_from_params with participants", context do
-    ConversationParticipant.create_from_params(["1"], context[:conversation], Repo)
+    user2 = Repo.get_by(ChatDemo.User, %{email: "testuser2@gmail.com"})
+    ConversationParticipant.create_from_params(["#{user2.id}"], context[:conversation], Repo)
   end
 
   test "create_from_params without participants", context do

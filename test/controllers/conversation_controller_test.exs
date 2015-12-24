@@ -3,11 +3,13 @@ defmodule ChatDemo.ConversationControllerTest do
 
   alias ChatDemo.Conversation
 
-  @valid_attrs %{message: "some content", user_id: 42}
+  user = Repo.get_by(ChatDemo.User, %{email: "testuser1@gmail.com"})
+  @valid_attrs %{message: "some content", user_id: user.id}
   @invalid_attrs %{}
 
   setup do
     conn = conn()
+    |> post session_path(conn, :create, %{"session": %{"email": "testuser1@gmail.com", "password": "foobar"}})
     {:ok, conn: conn}
   end
 
@@ -22,7 +24,8 @@ defmodule ChatDemo.ConversationControllerTest do
   end
 
   test "creates conversation with participants", %{conn: conn} do
-    conversation_params = Map.merge @valid_attrs, %{ conversation_participants: ["1"] }
+    user2 = Repo.get_by(ChatDemo.User, %{email: "testuser2@gmail.com"})
+    conversation_params = Map.merge @valid_attrs, %{ conversation_participants: ["#{user2.id}"] }
     conn = post conn, conversation_path(conn, :create), conversation: conversation_params 
     assert redirected_to(conn) == conversation_path(conn, :index)
     conversation = Repo.get_by(Conversation, @valid_attrs)
@@ -37,7 +40,8 @@ defmodule ChatDemo.ConversationControllerTest do
   end
 
   test "shows chosen resource", %{conn: conn} do
-    conversation = Repo.insert! %Conversation{}
+    user = Repo.get_by(ChatDemo.User, %{email: "testuser1@gmail.com"})
+    conversation = Repo.insert! %Conversation{"user_id": user.id}
     conn = get conn, conversation_path(conn, :show, conversation)
     assert html_response(conn, 200) =~ "Show conversation"
   end

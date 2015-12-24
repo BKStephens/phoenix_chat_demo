@@ -4,8 +4,15 @@ defmodule ChatDemo.ConversationTest do
 
   alias ChatDemo.Conversation
 
-  @valid_attrs %{message: "some content", parent_id: 42, user_id: 42}
+  user = Repo.get_by(ChatDemo.User, %{email: "testuser1@gmail.com"})
+  @valid_attrs %{message: "some content", parent_id: 42, user_id: user.id}
   @invalid_attrs %{}
+
+  setup do
+    conn = conn()
+    |> post session_path(conn, :create, %{"session": %{"email": "testuser1@gmail.com", "password": "foobar"}})
+    {:ok, conn: conn}
+  end 
 
   test "changeset with valid attributes" do
     changeset = Conversation.changeset(%Conversation{}, @valid_attrs)
@@ -17,9 +24,9 @@ defmodule ChatDemo.ConversationTest do
     refute changeset.valid?
   end
 
-  test "a reply to a conversation" do
-    conversation_params = %{message: "some content", user_id: 42}
-    post conn, conversation_path(conn, :create), conversation: conversation_params 
+  test "a reply to a conversation", context do
+    conversation_params = %{message: "original message for a reply to a conversation"}
+    post context[:conn], conversation_path(context[:conn], :create), conversation: conversation_params 
     conversation = Repo.get_by(Conversation, conversation_params) |> Repo.preload([:conversation_participants])
     ChatDemo.ConversationParticipant.create_from_params(["43","44"], conversation, Repo)
     conversation = Repo.get_by(Conversation, conversation_params) |> Repo.preload([:conversation_participants])

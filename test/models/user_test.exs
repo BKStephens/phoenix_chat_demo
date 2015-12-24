@@ -17,7 +17,7 @@ defmodule ChatDemo.UserTest do
     refute changeset.valid?
   end
 
-  test "get all users besides the current user", context do
+  test "get all users besides the current user" do
     conn = conn()
     #TODO: refactor to use https://github.com/sinetris/factory_girl_elixir
     user1_params = %{email: "user1@gmail.com", password: "foobar"}
@@ -27,7 +27,9 @@ defmodule ChatDemo.UserTest do
     user1 = Repo.get_by(User, Map.take(user1_params, [:email]))
     user2 = Repo.get_by(User, Map.take(user2_params, [:email]))
 
-    all_other_users = User.all_other_users(Repo, user1.id)
-    assert Enum.count(all_other_users) == 1
+    all_other_users_ids = User.all_other_users(Repo, user1.id)
+                          |> Enum.map(&(&1.id)) 
+    refute all_other_users_ids |> Enum.member?(user1.id)
+    assert all_other_users_ids |> Enum.member?(user2.id)
   end
 end
