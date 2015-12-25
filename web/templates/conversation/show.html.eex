@@ -17,6 +17,7 @@
 
 <%= tag :meta, name: "conversation_id", content: @conversation.id %>
 <%= tag :meta, name: "user_token", content: Phoenix.Token.sign(@conn, "user_id", current_user(@conn).id) %>
+<%= tag :meta, name: "user_id", content: current_user(@conn).id %>
 
 <div id="messages">
   <%= for cm <- @conversation_messages do %>

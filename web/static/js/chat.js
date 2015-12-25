@@ -25,16 +25,31 @@ class Chat {
           })
           msgBody.val("")
         }
+        else {
+         channel.push("typing_indicator")
+        }
       })
-    channel.on( "new:message", message => this.renderMessage(message) )
+    channel.on("new:message", message => this.renderMessage(message))
+    channel.on("typing_indicator", response => this.displayTypingIndicator(response.user))
   }
 
   static renderMessage(message) {
-    var messages = $("#messages")
-    var user = this.sanitize(message.user || "New User")
-    var body = this.sanitize(message.body)
+    let messages = $("#messages")
+    let user = this.sanitize(message.user || "New User")
+    let body = this.sanitize(message.body)
 
     messages.append(`<p><b>[${user}]</b>: ${body}</p>`)
+  }
+
+  static displayTypingIndicator(user) {
+    if (user.id != $("meta[name=user_id]").attr("content")) {
+      let messages = $("#messages")
+      let sanitized_user = this.sanitize(user.email || "New User")
+
+      $("#" + `user_${user.id}_typing_indicator`).remove()
+      messages.append(`<p id='user_${user.id}_typing_indicator'>${sanitized_user} is typing...</p>`)
+      $("#" + `user_${user.id}_typing_indicator`).show().delay(500).fadeOut();
+    }
   }
 
   static sanitize(str) { return $("<div/>").text(str).html() }
