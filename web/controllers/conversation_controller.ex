@@ -13,7 +13,8 @@ defmodule ChatDemo.ConversationController do
                              join: cp in ConversationParticipant, 
                              on: c.id == cp.conversation_id,
                              where: is_nil(c.parent_id)
-                                    and cp.user_id == ^user_id)
+                                    and cp.user_id == ^user_id,
+                             preload: [:user])
     render(conn, "index.html", conversations: conversations)
   end
 
