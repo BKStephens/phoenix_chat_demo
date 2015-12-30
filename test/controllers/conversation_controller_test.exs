@@ -27,7 +27,6 @@ defmodule ChatDemo.ConversationControllerTest do
     user2 = Repo.get_by(ChatDemo.User, %{email: "testuser2@gmail.com"})
     conversation_params = Map.merge @valid_attrs, %{ conversation_participants: ["#{user2.id}"] }
     conn = post conn, conversation_path(conn, :create), conversation: conversation_params 
-    assert redirected_to(conn) == conversation_path(conn, :index)
     conversation = Repo.get_by(Conversation, @valid_attrs)
     assert conversation
     conversation_participants = Repo.all assoc(conversation, :conversation_participants)

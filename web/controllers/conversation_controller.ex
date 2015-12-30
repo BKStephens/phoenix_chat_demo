@@ -38,8 +38,7 @@ defmodule ChatDemo.ConversationController do
         end
         ConversationParticipant.create_from_params(participants, conversation, Repo)
         conn
-        |> put_flash(:info, "Conversation created successfully.")
-        |> redirect(to: conversation_path(conn, :index))
+        |> redirect(to: conversation_path(conn, :show, conversation))
       {:error, _changeset} ->
         redirect conn, to: "/conversations/new"
     end
