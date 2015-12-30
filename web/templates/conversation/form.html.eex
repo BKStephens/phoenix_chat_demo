@@ -10,7 +10,7 @@
     </div>
   <% end %>
 
-  <%= label f, :conversation_participants, "Recipients", class: "control-label" %>
+  <%= label f, :conversation_participants, "Recipients", class: "control-label", style: "display: block;" %>
   <%= multiple_select(f, :conversation_participants, name_id_map(@users)) %>
 
   <div class="form-group">
