@@ -20,9 +20,9 @@ defmodule ChatDemo.ConversationChannelTest do
     assert socket.topic == "conversations:1"
   end
 
-  test "when a new message is received it should be broadcast to subscribers", context do
+  test "when a new message is received it should be broadcast to subscribers" do
     user = Repo.get_by(ChatDemo.User, %{email: "testuser1@gmail.com"})
-    {:ok, _client, socket} = socket("user:id", %{current_user: 1}) 
+    {:ok, _client, socket} = socket("user:id", %{current_user: user.id})
                              |> subscribe_and_join(ConversationChannel, "conversations:1")
 
     push socket, "new:message", %{"user" => "testuser1@gmail.com", "body" => "hello!"}
@@ -31,7 +31,7 @@ defmodule ChatDemo.ConversationChannelTest do
 
   test "when a typing_indicator is received it should be broadcast to subsribers" do
     user = Repo.get_by(ChatDemo.User, %{email: "testuser1@gmail.com"})
-    {:ok, _client, socket} = socket("user:id", %{current_user: 1}) 
+    {:ok, _client, socket} = socket("user:id", %{current_user: 1})
                              |> subscribe_and_join(ConversationChannel, "conversations:1")
     push socket, "typing_indicator", %{"user" => "testuser1@gmail.com"}
     assert_broadcast "typing_indicator", %{user: %{email: "testuser1@gmail.com", id: 1}}

@@ -1,5 +1,6 @@
 <h3>Welcome to a Phoenix Chat Demo!</h3>
 <div>
-To get started, register a user and then login. When registering, the email
-address does not have to be real, but it can't have already been registered.
-</div>  
+  <p>To get started, register a user and then login. When registering, the email
+  address does not have to be real, but it can't have already been registered.</p>
+  <p>After registering, login and you will be redirected to <%= link "Conversations", to: conversation_path(@conn, :index) %></p>
+</div>
