@@ -22,10 +22,8 @@ defmodule ChatDemo.ConversationChannel do
     {:noreply, socket}
   end
 
-  def get_current_user(socket) do
-    IO.inspect socket
-    #TODO: set current_user in socket from tests
-    user_id = socket.assigns[:current_user] || 0
+  defp get_current_user(socket) do
+    user_id = socket.assigns[:current_user]
     ChatDemo.Repo.get_by(ChatDemo.User, %{id: user_id})
   end
 end
