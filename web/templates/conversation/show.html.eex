@@ -26,7 +26,7 @@
 </div>
 <br/>
 
-<div class="col-md-6 form-group">
+<div class="col-md-12 form-group">
   <label>Message</label>
   <input id="message" type="text" class="form-control" />
 </div>
