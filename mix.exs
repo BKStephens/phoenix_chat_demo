@@ -4,7 +4,7 @@ defmodule ChatDemo.Mixfile do
   def project do
     [app: :chat_demo,
      version: "0.0.1",
-     elixir: "~> 1.0",
+     elixir: "~> 1.3",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
@@ -30,11 +30,13 @@ defmodule ChatDemo.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.1"},
+    [{:phoenix, "~> 1.1.6"},
+     {:plug, "1.1.8"},
      {:phoenix_ecto, "~> 2.0"},
      {:phoenix_html, "~> 2.3"},
-     {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:postgrex, ">= 0.0.0"},
+     {:phoenix_live_reload, "1.0.8", only: :dev},
+     {:postgrex, "0.10.0"},
+     {:connection, "1.0.4"},
      {:comeonin, "~> 1.0"},
      {:cowboy, "~> 1.0"}]
   end
@@ -46,7 +48,11 @@ defmodule ChatDemo.Mixfile do
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-     "ecto.reset": ["ecto.drop", "ecto.setup"]]
+    [
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "test.seed": ["run #{Path.join(__DIR__, "priv/repo/seeds.exs")}"],
+      "test": ["ecto.reset", "test.seed", "test"]
+    ]
   end
 end

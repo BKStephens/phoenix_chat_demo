@@ -1,20 +1,20 @@
 # ChatDemo
 
-To start your Phoenix app:
+## Start demo
 
-  1. Install dependencies with `mix deps.get`
-  2. Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  3. Load seed data with `mix run priv/repo/seeds.exs`
-  4. Start Phoenix endpoint with `mix phoenix.server`
+[Install docker](https://docs.docker.com/get-docker/)
+
+```
+docker-compose build
+docker-compose up
+```
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+## Run tests
 
-## Learn more
+Make sure the docker containers are already running and run:
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: http://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+```
+docker-compose exec web mix test
+```
