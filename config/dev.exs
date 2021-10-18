@@ -38,5 +38,5 @@ config :chat_demo, ChatDemo.Repo,
   username: "postgres",
   password: "postgres",
   database: "chat_demo_dev",
-  hostname: "localhost",
+  hostname: System.get_env("POSTGRES_HOST") || "localhost",
   pool_size: 10
